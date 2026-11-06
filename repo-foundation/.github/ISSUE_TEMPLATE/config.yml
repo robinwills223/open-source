@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security Vulnerability Reporting
+    url: https://github.com/open-source/repo-foundation/security/advisories
+    about: Please report security vulnerabilities privately via GitHub Advisories.
+  - name: Questions & Architectural Discussions
+    url: https://github.com/open-source/repo-foundation/discussions
+    about: Ask questions or discuss architectural designs with the community.
+

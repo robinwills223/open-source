@@ -1,0 +1,28 @@
+# EXPECTED_FAILURE: Schema error at 'capabilities.postgres': True was expected
+# Ephemeral PaaS containers wipe disk state on redeploy, causing permanent SQLite data loss.
+profile_version: 1
+name: feedback-collector
+description: "A focused internal feedback tool with 20 beta testers running SQLite on ephemeral PaaS."
+audience: junior_developer
+product_shape: small_tool
+scope_level: small
+stack: django
+expected_users: 20
+team_size: 1
+data_sensitivity: personal
+budget_range: bootstrap
+validation_stage: validated_pre_revenue
+founder_region: US
+hosting_target: paas_ephemeral
+escalation_signals: []
+capabilities:
+  docker: false
+  postgres: false
+  redis: false
+  background_jobs: false
+  ci: false
+  error_monitoring: false
+  compliance_checklist: false
+  rate_limiting: false
+  minimum_viable_backup: true
+  backups: false

@@ -1,0 +1,27 @@
+# VALID: Multi-user SaaS using hosted checkout; heavy async workers remain off without escalation signals.
+profile_version: 1
+name: creator-membership-hub
+description: "A multi-user creator subscription service using Stripe Checkout hosted checkout."
+audience: non_technical_founder
+product_shape: multi_user_saas
+scope_level: medium
+stack: django
+expected_users: 1200
+team_size: 2
+data_sensitivity: payments_hosted
+budget_range: growth
+validation_stage: paying_customers
+founder_region: EU
+hosting_target: managed
+escalation_signals: []
+capabilities:
+  docker: true
+  postgres: true
+  redis: false
+  background_jobs: false
+  ci: true
+  error_monitoring: true
+  compliance_checklist: false
+  rate_limiting: true
+  minimum_viable_backup: true
+  backups: true

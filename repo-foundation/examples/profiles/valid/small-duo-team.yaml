@@ -1,0 +1,28 @@
+# VALID: Small internal tool built by two developers; enables only docker and ci for team parity.
+profile_version: 1
+name: internal-asset-tracker
+description: "An internal office asset tracking tool built collaboratively by a two-developer team."
+audience: junior_developer
+product_shape: small_tool
+scope_level: small
+stack: django
+expected_users: 35
+team_size: 2
+data_sensitivity: none
+budget_range: zero
+validation_stage: prototype
+founder_region: US
+hosting_target: local
+escalation_signals: []
+capabilities:
+  docker: true
+  postgres: false
+  redis: false
+  background_jobs: false
+  ci: true
+  error_monitoring: false
+  compliance_checklist: false
+  rate_limiting: false
+  minimum_viable_backup: false
+  backups: false
+

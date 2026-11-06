@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Tracker{% endblock %} - Small Tool</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><a href="{% url 'records:record_list' %}">Records Tracker</a></h1>
+      <nav>
+        {% if user.is_authenticated %}
+          <span>User: <strong>{{ user.username }}</strong></span>
+          <a href="{% url 'records:record_list' %}">Records</a>
+          <a href="{% url 'records:record_create' %}">+ New</a>
+          <form method="post" action="{% url 'logout' %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">Log Out</button>
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}">Log In</a>
+        {% endif %}
+      </nav>
+    </header>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="card" style="border-left: 4px solid var(--primary); margin-bottom: 1rem;">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>
+

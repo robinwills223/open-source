@@ -1,0 +1,33 @@
+# EXPECTED_FAILURE: Non-technical founders cannot specify overrides
+# Founder profiles are strictly prohibited from using overrides per docs/05 Section 10.1 #1.
+profile_version: 1
+name: founder-custom-tool
+description: "Founder trying to override capabilities."
+audience: non_technical_founder
+product_shape: small_tool
+scope_level: small
+stack: django
+expected_users: 10
+team_size: 1
+data_sensitivity: none
+budget_range: zero
+validation_stage: idea
+founder_region: US
+hosting_target: local
+escalation_signals: []
+overrides:
+  - capability: docker
+    value: true
+    reason: "Founder wants Docker for containers"
+capabilities:
+  docker: true
+  postgres: false
+  redis: false
+  background_jobs: false
+  ci: false
+  error_monitoring: false
+  compliance_checklist: false
+  rate_limiting: false
+  minimum_viable_backup: false
+  backups: false
+

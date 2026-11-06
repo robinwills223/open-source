@@ -1,0 +1,28 @@
+# VALID: Demand test landing page validating market interest via public email waitlist.
+profile_version: 1
+name: ai-meeting-summarizer-waitlist
+description: "A pre-launch landing page and email waitlist to test market demand for an AI meeting summary tool."
+audience: non_technical_founder
+product_shape: demand_test
+scope_level: small
+stack: django
+expected_users: 150
+team_size: 1
+data_sensitivity: none
+budget_range: zero
+validation_stage: idea
+founder_region: US
+hosting_target: paas_persistent
+escalation_signals: []
+capabilities:
+  docker: false
+  postgres: false
+  redis: false
+  background_jobs: false
+  ci: false
+  error_monitoring: false
+  compliance_checklist: false
+  rate_limiting: false
+  minimum_viable_backup: false
+  backups: false
+

@@ -1,0 +1,46 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Environment variables & local secrets
+.env
+.env.local
+.env.*.local
+
+# Django & SQLite database files
+*.sqlite3
+db.sqlite3
+db.sqlite3-journal
+
+# Database dumps and backups
+backups/
+*.dump
+*.sql
+
+# Testing & coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Project outputs & builds
+output/
+dist/
+build/
+

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Logged Out{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 400px; margin: 2rem auto; text-align: center;">
+  <h2 style="margin-bottom: 1rem;">Logged Out</h2>
+  <p style="color: var(--muted); margin-bottom: 1.5rem;">
+    You have been successfully logged out of your session.
+  </p>
+  <a href="{% url 'login' %}" class="btn btn-primary">Log In Again</a>
+</div>
+{% endblock %}
+

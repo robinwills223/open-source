@@ -1,0 +1,33 @@
+# EXPECTED_FAILURE: Safety floor violation: minimum_viable_backup cannot be disabled
+# MVB is an inviolable safety floor once beta users exist per docs/05 Section 10.1 #3.
+profile_version: 1
+name: risky-beta-tool
+description: "A beta tool attempting to disable MVB with real users."
+audience: senior_developer
+product_shape: small_tool
+scope_level: small
+stack: django
+expected_users: 50
+team_size: 1
+data_sensitivity: none
+budget_range: bootstrap
+validation_stage: validated_pre_revenue
+founder_region: US
+hosting_target: paas_persistent
+escalation_signals: []
+overrides:
+  - capability: minimum_viable_backup
+    value: false
+    reason: "Developer wants to bypass backups for now"
+capabilities:
+  docker: false
+  postgres: false
+  redis: false
+  background_jobs: false
+  ci: false
+  error_monitoring: false
+  compliance_checklist: false
+  rate_limiting: false
+  minimum_viable_backup: false
+  backups: false
+

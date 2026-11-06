@@ -1,0 +1,400 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/open-source/repo-foundation/main/schemas/project.profile.schema.json",
+  "title": "ProjectProfile",
+  "description": "Structured specification representing a project's audience, shape, scale, operational constraints, and capabilities.",
+  "type": "object",
+  "required": [
+    "profile_version",
+    "name",
+    "audience",
+    "product_shape",
+    "scope_level",
+    "stack",
+    "expected_users",
+    "team_size",
+    "data_sensitivity",
+    "budget_range",
+    "validation_stage",
+    "hosting_target",
+    "capabilities"
+  ],
+  "properties": {
+    "profile_version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Schema version number for the profile document (starts at 1)."
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Unique URL-friendly slug identifying the project (lowercase letters, numbers, and hyphens)."
+    },
+    "description": {
+      "type": "string",
+      "description": "A plain-language summary of what the product does and the core problem it solves."
+    },
+    "audience": {
+      "type": "string",
+      "enum": [
+        "non_technical_founder",
+        "junior_developer",
+        "senior_developer"
+      ],
+      "description": "The primary user persona interacting with the repository and LLM interface."
+    },
+    "product_shape": {
+      "type": "string",
+      "enum": [
+        "demand_test",
+        "small_tool",
+        "multi_user_saas"
+      ],
+      "description": "The functional form of the product: landing page validation, focused single-purpose tool, or multi-tenant SaaS."
+    },
+    "scope_level": {
+      "type": "string",
+      "enum": [
+        "small",
+        "medium",
+        "enterprise"
+      ],
+      "description": "The operational scale tier. Never asked directly; deterministically derived from expected_users, data_sensitivity, and validation_stage per docs/05."
+    },
+    "stack": {
+      "type": "string",
+      "enum": [
+        "django"
+      ],
+      "description": "The foundational software stack. Locked to 'django' in initial version."
+    },
+    "expected_users": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Estimated count of monthly active users or customer accounts anticipated over the next 3 to 6 months."
+    },
+    "team_size": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Total number of engineers or contributors actively committing code. Directly drives ci and docker capability triggers."
+    },
+    "data_sensitivity": {
+      "type": "string",
+      "enum": [
+        "none",
+        "personal",
+        "payments_hosted",
+        "payments_direct",
+        "health"
+      ],
+      "description": "The highest category of sensitive data handled. 'payments_hosted': external checkout (card data never touches app). 'payments_direct': card data transmitted or stored directly (strongly discouraged)."
+    },
+    "budget_range": {
+      "type": "string",
+      "enum": [
+        "zero",
+        "bootstrap",
+        "growth",
+        "high"
+      ],
+      "description": "Available monthly infrastructure budget (zero: $0, bootstrap: <$50/mo, growth: $50-$500/mo, high: >$500/mo)."
+    },
+    "validation_stage": {
+      "type": "string",
+      "enum": [
+        "idea",
+        "prototype",
+        "validated_pre_revenue",
+        "paying_customers",
+        "scaling"
+      ],
+      "description": "Current real-world validation state of the project."
+    },
+    "founder_region": {
+      "type": "string",
+      "pattern": "^([A-Z]{2}|EU)$",
+      "description": "Optional ISO 3166-1 alpha-2 country code (or 'EU') to verify local payment gateways, tax nexus, and data protection rules."
+    },
+    "hosting_target": {
+      "type": "string",
+      "enum": [
+        "local",
+        "vps",
+        "paas_ephemeral",
+        "paas_persistent",
+        "managed"
+      ],
+      "description": "Target deployment hosting environment. Decided without asking and recorded in DECISIONS-FOR-FOUNDER.md."
+    },
+    "escalation_signals": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "sqlite_lock_contention",
+          "slow_sync_calls",
+          "high_traffic_bursts"
+        ]
+      },
+      "uniqueItems": true,
+      "description": "Optional list of operational pressure signals observed in production that trigger capability upgrades per docs/05."
+    },
+    "overrides": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "capability",
+          "value",
+          "reason"
+        ],
+        "properties": {
+          "capability": {
+            "type": "string",
+            "enum": [
+              "docker",
+              "postgres",
+              "redis",
+              "background_jobs",
+              "ci",
+              "error_monitoring",
+              "compliance_checklist",
+              "rate_limiting",
+              "minimum_viable_backup",
+              "backups"
+            ]
+          },
+          "value": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 10,
+            "description": "Technical justification for the override (minimum 10 characters)."
+          }
+        },
+        "additionalProperties": false
+      },
+      "description": "Optional developer overrides. Allowed only for junior_developer (with warning) or senior_developer. Safety floors cannot be overridden."
+    },
+    "capabilities": {
+      "type": "object",
+      "description": "Explicit capability switch states evaluated from profile signals per docs/05.",
+      "required": [
+        "docker",
+        "postgres",
+        "redis",
+        "background_jobs",
+        "ci",
+        "error_monitoring",
+        "compliance_checklist",
+        "rate_limiting",
+        "minimum_viable_backup",
+        "backups"
+      ],
+      "properties": {
+        "docker": {
+          "type": "boolean",
+          "description": "Containerized development and deployment environment."
+        },
+        "postgres": {
+          "type": "boolean",
+          "description": "PostgreSQL relational database instead of default SQLite."
+        },
+        "redis": {
+          "type": "boolean",
+          "description": "Redis in-memory store for caching or queue broker."
+        },
+        "background_jobs": {
+          "type": "boolean",
+          "description": "Asynchronous background worker queue for detached tasks."
+        },
+        "ci": {
+          "type": "boolean",
+          "description": "Automated Continuous Integration test runner on pull requests."
+        },
+        "error_monitoring": {
+          "type": "boolean",
+          "description": "Centralized error tracking service (e.g. Sentry)."
+        },
+        "compliance_checklist": {
+          "type": "boolean",
+          "description": "Heavy baseline regulatory checklists (e.g. direct PCI DSS cardholder audit, HIPAA hygiene)."
+        },
+        "rate_limiting": {
+          "type": "boolean",
+          "description": "Request throttling on public or authenticated endpoints."
+        },
+        "minimum_viable_backup": {
+          "type": "boolean",
+          "description": "Baseline off-server database copy routine active from validated_pre_revenue onward."
+        },
+        "backups": {
+          "type": "boolean",
+          "description": "Automated cloud-managed scheduled database snapshots."
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "audience": {
+            "const": "non_technical_founder"
+          }
+        },
+        "required": ["audience"]
+      },
+      "then": {
+        "properties": {
+          "overrides": false
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "validation_stage": {
+            "enum": [
+              "validated_pre_revenue",
+              "paying_customers",
+              "scaling"
+            ]
+          }
+        },
+        "required": ["validation_stage"]
+      },
+      "then": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "minimum_viable_backup": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "data_sensitivity": {
+            "enum": [
+              "payments_direct",
+              "health"
+            ]
+          }
+        },
+        "required": ["data_sensitivity"]
+      },
+      "then": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "compliance_checklist": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "hosting_target": {
+            "const": "paas_ephemeral"
+          }
+        },
+        "required": ["hosting_target"]
+      },
+      "then": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "postgres": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "escalation_signals": {
+            "contains": {
+              "const": "slow_sync_calls"
+            }
+          }
+        },
+        "required": ["escalation_signals"]
+      },
+      "then": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "background_jobs": {
+                "const": true
+              },
+              "redis": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "escalation_signals": {
+            "contains": {
+              "const": "sqlite_lock_contention"
+            }
+          }
+        },
+        "required": ["escalation_signals"]
+      },
+      "then": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "postgres": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "escalation_signals": {
+            "contains": {
+              "const": "high_traffic_bursts"
+            }
+          }
+        },
+        "required": ["escalation_signals"]
+      },
+      "then": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "redis": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

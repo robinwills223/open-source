@@ -1,0 +1,27 @@
+# VALID: Solo bootstrap SaaS with hosted checkout; enables rate limiting for SaaS protection and MVB.
+profile_version: 1
+name: micro-saas-billing
+description: "A small-scope multi-tenant SaaS for tracking client retainers run by a solo founder with hosted checkout."
+audience: non_technical_founder
+product_shape: multi_user_saas
+scope_level: small
+stack: django
+expected_users: 50
+team_size: 1
+data_sensitivity: payments_hosted
+budget_range: bootstrap
+validation_stage: paying_customers
+founder_region: US
+hosting_target: vps
+escalation_signals: []
+capabilities:
+  docker: false
+  postgres: false
+  redis: false
+  background_jobs: false
+  ci: false
+  error_monitoring: false
+  compliance_checklist: false
+  rate_limiting: true
+  minimum_viable_backup: true
+  backups: false

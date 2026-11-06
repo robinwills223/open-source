@@ -1,0 +1,27 @@
+# VALID: Small single-purpose paid utility for 100 users with hosted checkout; enables only MVB.
+profile_version: 1
+name: freelance-invoice-generator
+description: "A focused paid web tool helping freelance designers create, customize, and export client invoices with hosted checkout."
+audience: non_technical_founder
+product_shape: small_tool
+scope_level: small
+stack: django
+expected_users: 100
+team_size: 1
+data_sensitivity: payments_hosted
+budget_range: bootstrap
+validation_stage: paying_customers
+founder_region: US
+hosting_target: vps
+escalation_signals: []
+capabilities:
+  docker: false
+  postgres: false
+  redis: false
+  background_jobs: false
+  ci: false
+  error_monitoring: false
+  compliance_checklist: false
+  rate_limiting: false
+  minimum_viable_backup: true
+  backups: false

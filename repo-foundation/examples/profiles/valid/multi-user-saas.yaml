@@ -1,0 +1,27 @@
+# VALID: Multi-user SaaS handling direct payments; queues/caches stay off until slow calls measured.
+profile_version: 1
+name: subscription-billing-hub
+description: "A multi-tenant B2B subscription and invoice management platform with direct payment card processing."
+audience: senior_developer
+product_shape: multi_user_saas
+scope_level: medium
+stack: django
+expected_users: 2500
+team_size: 3
+data_sensitivity: payments_direct
+budget_range: growth
+validation_stage: paying_customers
+founder_region: US
+hosting_target: managed
+escalation_signals: []
+capabilities:
+  docker: true
+  postgres: true
+  redis: false
+  background_jobs: false
+  ci: true
+  error_monitoring: true
+  compliance_checklist: true
+  rate_limiting: true
+  minimum_viable_backup: true
+  backups: true

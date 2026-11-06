@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}My Records{% endblock %}
+
+{% block content %}
+<div class="toolbar">
+  <div>
+    <strong>Filter:</strong>
+    <a href="{% url 'records:record_list' %}" class="btn btn-secondary {% if not status_filter %}active{% endif %}" style="padding: 0.25rem 0.5rem; font-size: 0.85rem;">All</a>
+    {% for val, label in status_choices %}
+      <a href="{% url 'records:record_list' %}?status={{ val }}" class="btn btn-secondary {% if status_filter == val %}active{% endif %}" style="padding: 0.25rem 0.5rem; font-size: 0.85rem;">{{ label }}</a>
+    {% endfor %}
+  </div>
+  <div>
+    <a href="{% url 'records:record_create' %}" class="btn btn-primary">+ New Record</a>
+    <a href="{% url 'records:record_export_csv' %}" class="btn btn-secondary">Export CSV</a>
+  </div>
+</div>
+
+<div class="card">
+  {% if records %}
+    {% for record in records %}
+      <div class="record-item">
+        <div>
+          <a href="{% url 'records:record_detail' record.pk %}">{{ record.title }}</a>
+          <span class="badge badge-{{ record.status }}" style="margin-left: 0.5rem;">{{ record.status }}</span>
+          <div style="font-size: 0.8rem; color: var(--muted);">Updated {{ record.updated_at|date:"M d, Y H:i" }}</div>
+        </div>
+        <div>
+          <a href="{% url 'records:record_update' record.pk %}" class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Edit</a>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div style="text-align: center; color: var(--muted); padding: 2rem 0;">
+      No records found. Click <strong>+ New Record</strong> to add your first item.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+

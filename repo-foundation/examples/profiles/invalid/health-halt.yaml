@@ -1,0 +1,28 @@
+# EXPECTED_FAILURE: Enterprise scope is formally specified but automated scaffolding is not yet implemented
+# Enterprise scaffolding is not yet supported in this repo; the LLM must halt scaffolding per docs/05 Section 1.3.
+profile_version: 1
+name: patient-portal-demo
+description: "A patient appointment and health record management portal."
+audience: junior_developer
+product_shape: small_tool
+scope_level: enterprise
+stack: django
+expected_users: 50
+team_size: 1
+data_sensitivity: health
+budget_range: zero
+validation_stage: prototype
+founder_region: US
+hosting_target: local
+escalation_signals: []
+capabilities:
+  docker: false
+  postgres: true
+  redis: false
+  background_jobs: false
+  ci: false
+  error_monitoring: true
+  compliance_checklist: true
+  rate_limiting: true
+  minimum_viable_backup: false
+  backups: true

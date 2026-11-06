@@ -1,0 +1,27 @@
+# VALID: Tiny internal utility for 15 users at prototype stage; enables zero infrastructure capabilities.
+profile_version: 1
+name: team-inventory-tracker
+description: "A simple internal utility for tracking office hardware and loaner laptops among employees."
+audience: junior_developer
+product_shape: small_tool
+scope_level: small
+stack: django
+expected_users: 15
+team_size: 1
+data_sensitivity: none
+budget_range: zero
+validation_stage: prototype
+founder_region: US
+hosting_target: local
+escalation_signals: []
+capabilities:
+  docker: false
+  postgres: false
+  redis: false
+  background_jobs: false
+  ci: false
+  error_monitoring: false
+  compliance_checklist: false
+  rate_limiting: false
+  minimum_viable_backup: false
+  backups: false

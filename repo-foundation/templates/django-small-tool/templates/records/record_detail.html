@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}{{ record.title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+    <div>
+      <h2 style="margin-bottom: 0.25rem;">{{ record.title }}</h2>
+      <span class="badge badge-{{ record.status }}">{{ record.status }}</span>
+    </div>
+    <div>
+      <a href="{% url 'records:record_update' record.pk %}" class="btn btn-secondary">Edit</a>
+      <a href="{% url 'records:record_delete' record.pk %}" class="btn btn-danger">Delete</a>
+    </div>
+  </div>
+
+  <div style="margin: 1.5rem 0; padding: 1rem; background: var(--bg); border-radius: 6px;">
+    <strong>Notes:</strong>
+    <p style="margin-top: 0.5rem; white-space: pre-wrap;">{{ record.notes|default:"No notes entered." }}</p>
+  </div>
+
+  <div style="font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--border); padding-top: 0.75rem;">
+    Created: {{ record.created_at|date:"M d, Y H:i" }} | Last updated: {{ record.updated_at|date:"M d, Y H:i" }}
+  </div>
+</div>
+<p><a href="{% url 'records:record_list' %}" class="btn btn-secondary">&larr; Back to Records</a></p>
+{% endblock %}
+

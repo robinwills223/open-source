@@ -1,0 +1,29 @@
+# EXPECTED_FAILURE: Scope mismatch: declared 'small', but profile inputs derive 'medium'
+# Scope level cannot be arbitrarily selected; it is computed deterministically per docs/05 Section 1.
+profile_version: 1
+name: mismatched-scale-tool
+description: "A tool with 1500 users claiming small scope."
+audience: junior_developer
+product_shape: small_tool
+scope_level: small
+stack: django
+expected_users: 1500
+team_size: 1
+data_sensitivity: none
+budget_range: bootstrap
+validation_stage: idea
+founder_region: US
+hosting_target: local
+escalation_signals: []
+capabilities:
+  docker: false
+  postgres: true
+  redis: false
+  background_jobs: false
+  ci: false
+  error_monitoring: true
+  compliance_checklist: false
+  rate_limiting: true
+  minimum_viable_backup: false
+  backups: true
+
