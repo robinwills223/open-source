@@ -171,3 +171,43 @@ The four core technical questions for stack evolution are resolved with the foll
 ### 4. Payment Gateway Architecture
 - **Standard Default:** Recommend a **Merchant of Record** (such as LemonSqueezy or Paddle, verify before use) for international SaaS sales, after verifying `founder_region` availability.
 - **Rationale:** Merchants of Record handle global sales tax calculation, EU VAT One-Stop Shop (OSS) remittance (verify current rules), and international billing compliance on behalf of the founder, reducing substantial tax compliance overhead. For founders selling exclusively in their home country with existing tax registration, Stripe Checkout remains the standard alternative.
+
+---
+
+## 3. Production Deployment Architecture & Dependencies (v0.1)
+
+### DEC-008: Deployment Dependency Specification (`requirements-deploy.txt`)
+- **Date Checked:** 2026-11-06 (verified against PyPI).
+- **Core Principle:** The primary `requirements.txt` remains strictly `Django==5.2.9` to avoid forcing local development or testing environments to install web server infrastructure. Production deployment dependencies are isolated into `requirements-deploy.txt`.
+- **Packages Added:**
+  1. `gunicorn==23.0.0`: Industry-standard WSGI HTTP server for UNIX environments. Zero external binary dependencies; pure Python and C bindings; stable process worker model.
+  2. `whitenoise==6.9.0`: High-performance static file serving directly from Django WSGI without requiring a separate Nginx static file block. Provides gzip/brotli compression and unique hash manifest generation.
+- **Rejected Alternatives:**
+  - `uvicorn`: ASGI server rejected because Django Small Tool in v0.1 is strictly synchronous WSGI. Adding ASGI dependencies adds unneeded async complexity.
+  - `waitress`: WSGI server that works cross-platform, but Linux production environments overwhelmingly favor Gunicorn's battle-tested master/worker supervisor model.
+  - Database drivers (`psycopg`, etc.): Rejected because v0.1 Small Tool uses SQLite only.
+
+---
+
+### DEC-009: Production Hosting Platform Evaluation & Default Selection
+To determine the recommended deployment path for the v0.1 Django small-tool scaffold, three candidate architectures were evaluated:
+
+| Candidate Path | Persistent SQLite Storage | Docker Requirement | Cost Predictability | Operational Burden for Founder | Verdict |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **1. PaaS without Persistent Disk** *(e.g. standard Heroku dynos, default ephemeral containers)* | **FAILS:** Disks are wiped on restart/deploy. SQLite database is deleted. | None | Predictable | Low until data is lost. | **REJECTED:** Fatal flaw for SQLite. |
+| **2. PaaS with Persistent Volume** *(e.g. Render with attached Disk, Fly.io with Fly Volumes)* | **PASS:** Persistent volume preserves `db.sqlite3`. | Minimal to Medium (Fly requires CLI volume attach; Render requires manual mount path configuration). | *UNVERIFIED: check the provider's current docs before use* regarding persistent volume fees. | Medium: volume mount configuration syntax and platform-specific CLI commands. | **VIABLE ALTERNATIVE:** Kept as documented secondary path. |
+| **3. Single-Node VPS (Ubuntu + systemd + Caddy)** *(e.g. DigitalOcean, Hetzner, Linode)* | **PASS:** Native server disk preserves `db.sqlite3` indefinitely across restarts and code updates. | None: standard Python virtualenv. | High: flat predictable monthly server cost. *UNVERIFIED: check the provider's current docs before use* for current plan rates. | Low: Caddy provides automatic HTTPS with 3 configuration lines; systemd automatically manages service restarts. | **ACCEPTED AS DEFAULT (v0.1)** |
+
+#### Justification for Default Choice:
+A single-node Ubuntu VPS running Gunicorn under systemd with Caddy reverse proxy is selected as the primary default for v0.1:
+1. **Guaranteed SQLite Persistence:** The file system is natively persistent; redeploying code or restarting processes never erases `db.sqlite3`.
+2. **Zero Docker Barrier:** Runs in standard Python virtualenv, avoiding container build tools, multi-stage Dockerfiles, or container registry setup.
+3. **Automatic HTTPS:** Caddy obtains and renews TLS certificates automatically via Let's Encrypt without manual cron scripting.
+4. **Tool-Agnostic Standard:** Uses generic Linux system standards (systemd, crontab, bash) rather than proprietary platform lock-in.
+
+#### UNVERIFIED Claims Catalog:
+- DigitalOcean Droplet pricing and billing tiers: *UNVERIFIED: check the provider's current docs before use*.
+- Hetzner Cloud VPS server pricing and availability: *UNVERIFIED: check the provider's current docs before use*.
+- Render persistent disk pricing and free-tier limitations: *UNVERIFIED: check the provider's current docs before use*.
+- Fly.io persistent volume pricing and free-allowance limits: *UNVERIFIED: check the provider's current docs before use*.
+

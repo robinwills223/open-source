@@ -14,3 +14,8 @@ All core architectural documents, schemas, tooling, project templates, and tests
 - **[Reference Tooling & Project Generator](repo-foundation/tools/):** Profile validation CLI, link checker, hygiene scanner, and Django small-tool project generator.
 - **[Beginner Guide: Run Locally](repo-foundation/docs/guides/run-locally.md):** Step-by-step instructions for running the generated application locally.
 - **[Guide: What You Get](repo-foundation/docs/guides/what-you-get.md):** Overview of the starter records tracker workflow and baseline security limits.
+- **[Guide: Minimum Viable Backup & Restore](repo-foundation/docs/guides/backup-and-restore.md):** Native SQLite snapshots, off-server synchronization, and restore verification drills.
+- **[Guide: Baseline Security Audit](repo-foundation/docs/guides/security-baseline.md):** Pre-launch sanity checks and dependency auditing procedures (`pip-audit`).
+- **[Guide: Single-Node VPS Deployment](repo-foundation/docs/guides/deploy.md):** Step-by-step Ubuntu + systemd + Caddy production deployment guide.
+- **[Launch Checklist](repo-foundation/docs/guides/launch-checklist.md):** Printable go-live and operational maintenance checklist.
+- **[Customer Validation Kit](repo-foundation/docs/validation/01-before-you-build.md):** Customer interviews, demand testing, and pilot cohort management frameworks.

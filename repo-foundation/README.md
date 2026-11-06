@@ -20,6 +20,10 @@ Repo Foundation is an open-source guide and deterministic scaffolding tool that 
 1. **Intake:** The LLM asks at most five conversational questions to understand your users, validation stage, and data sensitivity.
 2. **Validated Profile:** Generates a deterministic `project.profile.yaml` adhering to strict architectural schema rules.
 3. **Scaffold Generation:** Generates a clean, working Django small-tool starter that runs locally with its own automated tests passing out of the box.
+4. **Minimum Viable Backup:** Built-in `backup_db` and `verify_backup` management commands using native SQLite streaming backups with integrity verification and retention pruning.
+5. **Baseline Security Audit:** Built-in `baseline_check` command evaluating environment variables, DEBUG state, SECRET_KEY, ALLOWED_HOSTS, and static isolation with plain-language recommendations.
+6. **Production Deployment Guide:** Step-by-step single-node Ubuntu + systemd + Caddy deployment guide, launch checklist, WhiteNoise static assets handling, and `requirements-deploy.txt`.
+7. **Customer Validation Kit:** Structured frameworks for interview discovery, landing page demand testing, pilot cohorts, and templates (`docs/validation/`).
 
 ---
 
@@ -84,6 +88,11 @@ cd my-tool && python manage.py test
 - [`docs/05-rules-single-source.md`](docs/05-rules-single-source.md): The sole authoritative source for scope derivation, triggers, and safeguards.
 - [`docs/guides/run-locally.md`](docs/guides/run-locally.md): Beginner local execution and troubleshooting guide.
 - [`docs/guides/what-you-get.md`](docs/guides/what-you-get.md): Breakdown of starter workflow and baseline protections.
+- [`docs/guides/backup-and-restore.md`](docs/guides/backup-and-restore.md): Minimum viable SQLite backup routines, rclone sync, and restore drills.
+- [`docs/guides/security-baseline.md`](docs/guides/security-baseline.md): Pre-launch baseline verification and dependency audits (`pip-audit`).
+- [`docs/guides/deploy.md`](docs/guides/deploy.md): Step-by-step production deployment on a single-node Ubuntu VPS with systemd and Caddy.
+- [`docs/guides/launch-checklist.md`](docs/guides/launch-checklist.md): Printable pre-launch, go-live, and operational maintenance checklist.
+- [`docs/validation/01-before-you-build.md`](docs/validation/01-before-you-build.md): Customer discovery framework, interview scripts, demand testing, and pilot cohorts.
 - [`docs/testing/cold-start-test.md`](docs/testing/cold-start-test.md): Standardized usability observation protocol.
 - [`docs/DECISIONS.md`](docs/DECISIONS.md): Architectural Decision Records (ADRs).
 - [`CONTRIBUTING.md`](CONTRIBUTING.md): How to run tests and propose profile fixtures.

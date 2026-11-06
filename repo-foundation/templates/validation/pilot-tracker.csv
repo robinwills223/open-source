@@ -1,0 +1,4 @@
+name_or_handle,organization,status,onboarding_date,last_active,key_feedback,paid_status
+Alex Rivera,Acme Services,active,2026-11-01,2026-11-05,"Loves the CSV export; requested automated reminder email",trial
+Taylor Chen,Freelance Studio,active,2026-11-02,2026-11-04,"Found record creation fast; smooth workflow",paid_deposit
+Jordan Smith,Logistics Co,churned,2026-10-25,2026-10-28,"Needed multi-warehouse tracking which is out of scope",free_pilot

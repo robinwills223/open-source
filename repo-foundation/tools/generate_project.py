@@ -26,6 +26,7 @@ def build_decisions_for_founder(profile: dict) -> str:
     """Generate DECISIONS-FOR-FOUNDER.md tailored to audience persona."""
     name = profile.get("name", "my-tool")
     audience = profile.get("audience", "non_technical_founder")
+    val_stage = profile.get("validation_stage", "idea")
     caps = profile.get("capabilities", {})
     mvb = caps.get("minimum_viable_backup", False)
 
@@ -37,6 +38,7 @@ def build_decisions_for_founder(profile: dict) -> str:
             f"- **Stack:** Django (pinned LTS 5.2.9)",
             f"- **Shape:** small_tool (monolithic synchronous)",
             f"- **Scope:** small (SQLite default, single-node execution)",
+            f"- **Validation Stage:** {val_stage}",
             "- **Active Capabilities:** None (all heavy infrastructure OFF by default)",
             "",
             "## Capability States",
@@ -50,9 +52,12 @@ def build_decisions_for_founder(profile: dict) -> str:
             lines.extend(
                 [
                     "",
-                    "## Operational Notice: Backup Routine Required",
-                    "> [!IMPORTANT]",
-                    "> `minimum_viable_backup` is active based on validation stage. Automated backup scripts are not included in v0.1; establish an external off-host database snapshot before onboarding production users.",
+                    "## Minimum Viable Backup Routine",
+                    "`minimum_viable_backup` is active. Built-in management commands handle local snapshots and verification:",
+                    "1. Run local snapshot: `python manage.py backup_db` (stored in `BACKUP_DIR`, default `./backups`, retaining last 14).",
+                    "2. Off-server transfer: Sync `./backups` to external S3-compatible storage or object store (e.g. via `rclone copy`).",
+                    "3. Restore verification: Run regular restore drills with `python manage.py verify_backup <backup_file>`.",
+                    "4. Operational guide: See `docs/guides/backup-and-restore.md`.",
                 ]
             )
         lines.extend(
@@ -64,8 +69,26 @@ def build_decisions_for_founder(profile: dict) -> str:
                 "3. `cp .env.example .env`",
                 "4. `python manage.py migrate`",
                 "5. `python manage.py test`",
+                "6. `python manage.py baseline_check` (pre-launch audit; see `docs/guides/security-baseline.md`)",
             ]
         )
+        if val_stage in ("idea", "prototype"):
+            lines.extend(
+                [
+                    f"7. Validate problem demand before expanding codebase:",
+                    f"   - Problem verification: `docs/validation/01-before-you-build.md`",
+                    f"   - Interview script: `docs/validation/02-interview-script.md` (template: `templates/validation/interview-notes.md`)",
+                    f"   - Demand testing: `docs/validation/03-demand-test.md`",
+                ]
+            )
+        else:
+            lines.extend(
+                [
+                    f"7. Pilot cohort execution:",
+                    f"   - Running pilots: `docs/validation/04-running-a-pilot.md`",
+                    f"   - Pilot participant tracker: `templates/validation/pilot-tracker.csv`",
+                ]
+            )
         return "\n".join(lines) + "\n"
 
     elif audience == "junior_developer":
@@ -84,9 +107,12 @@ def build_decisions_for_founder(profile: dict) -> str:
             lines.extend(
                 [
                     "",
-                    "## Backup Advisory",
-                    "> [!WARNING]",
-                    "> Because your product has active or beta users, data protection is essential. v0.1 does not yet ship an automated backup runner. Please set up a scheduled SQLite `.backup` routine before live launch.",
+                    "## Backup Routine (`minimum_viable_backup`)",
+                    "Because you have active or beta users, baseline data protection is enabled:",
+                    "1. Create a snapshot: `python manage.py backup_db` (saved to `./backups` by default).",
+                    "2. Off-server sync: Move backup files off the host using an automated tool like `rclone` to external storage.",
+                    "3. Verify snapshot health: Test recovery safely without touching live data via `python manage.py verify_backup <file>`.",
+                    "4. Operational guide: See `docs/guides/backup-and-restore.md`.",
                 ]
             )
         lines.extend(
@@ -96,8 +122,26 @@ def build_decisions_for_founder(profile: dict) -> str:
                 "1. Follow the local run guide in `README.md`.",
                 "2. Run automated tests with `python manage.py test`.",
                 "3. Use Django admin to manage records and users.",
+                "4. Run baseline security audit: `python manage.py baseline_check` (see `docs/guides/security-baseline.md`).",
             ]
         )
+        if val_stage in ("idea", "prototype"):
+            lines.extend(
+                [
+                    "5. Customer validation before writing more code:",
+                    "   - Problem discovery: `docs/validation/01-before-you-build.md`",
+                    "   - User interview script: `docs/validation/02-interview-script.md` (`templates/validation/interview-notes.md`)",
+                    "   - Landing page demand test: `docs/validation/03-demand-test.md`",
+                ]
+            )
+        else:
+            lines.extend(
+                [
+                    "5. Pilot user operations:",
+                    "   - Running a user pilot: `docs/validation/04-running-a-pilot.md`",
+                    "   - Tracking pilot cohort: `templates/validation/pilot-tracker.csv`",
+                ]
+            )
         return "\n".join(lines) + "\n"
 
     else:
@@ -108,7 +152,7 @@ def build_decisions_for_founder(profile: dict) -> str:
             "Congratulations! Your new software starter is ready to run on your computer.",
             "",
             "## What Was Built for You",
-            f"We created a secure, focused starter application called **{name}**. It includes:",
+            f"We created a focused baseline starter application called **{name}**. It includes:",
             "- A personal workspace where you can create, edit, view, and delete records.",
             "- Private account protection so each user only sees their own information.",
             "- A safe download button to export your records to a spreadsheet anytime.",
@@ -123,9 +167,12 @@ def build_decisions_for_founder(profile: dict) -> str:
             lines.extend(
                 [
                     "",
-                    "## Important Notice About Backups",
-                    "> [!IMPORTANT]",
-                    "> **Save your data regularly:** Because your project is reaching real users, you will need a backup copy of your database. In this early preview (v0.1), automated backup scripts are not yet built-in. Make sure you copy your `db.sqlite3` file to a safe place before real customer data arrives.",
+                    "## Protecting Your Users' Data (Backups)",
+                    "Because you have real people trying your product, you must protect their information:",
+                    "1. **Take a snapshot:** Run `python manage.py backup_db` to save a copy of your database to the `backups` folder.",
+                    "2. **Move copies off your server:** Use an automated tool (like `rclone`) to copy the `backups` folder to a separate cloud storage account.",
+                    "3. **Practice a restore:** Test that your backup actually works by running `python manage.py verify_backup <backup_file>`.",
+                    "4. Read the step-by-step guide in `docs/guides/backup-and-restore.md`.",
                 ]
             )
         lines.extend(
@@ -135,8 +182,26 @@ def build_decisions_for_founder(profile: dict) -> str:
                 "1. Open this folder in your LLM tool.",
                 "2. Say: *\"Walk me through running my new app step by step.\"*",
                 "3. Follow the instructions to start the server and see your app in your browser!",
+                "4. Before launching to real users, run: `python manage.py baseline_check` (see `docs/guides/security-baseline.md`).",
             ]
         )
+        if val_stage in ("idea", "prototype"):
+            lines.extend(
+                [
+                    "5. **Talk to real users before writing more code:**",
+                    "   - Check if the problem is painful enough: `docs/validation/01-before-you-build.md`",
+                    "   - Ask past-behavior questions: `docs/validation/02-interview-script.md` (take notes using `templates/validation/interview-notes.md`)",
+                    "   - Test real interest with a simple page: `docs/validation/03-demand-test.md`",
+                ]
+            )
+        else:
+            lines.extend(
+                [
+                    "5. **Observe your pilot users:**",
+                    "   - Run a focused 5-10 person pilot: `docs/validation/04-running-a-pilot.md`",
+                    "   - Track tester feedback and usage: `templates/validation/pilot-tracker.csv`",
+                ]
+            )
         return "\n".join(lines) + "\n"
 
 

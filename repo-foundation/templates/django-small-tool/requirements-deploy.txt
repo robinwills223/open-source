@@ -1,0 +1,4 @@
+# Production deployment dependencies for Django Small Tool
+# Pinned exact versions checked against PyPI on 2026-11-06
+gunicorn==23.0.0
+whitenoise==6.9.0

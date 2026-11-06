@@ -113,3 +113,26 @@ def test_generated_project_own_test_suite_passes(tmp_path):
     assert res.returncode == 0, f"Generated project tests failed:\n{res.stdout}\n{res.stderr}"
     assert "OK" in res.stderr or "OK" in res.stdout
 
+
+def test_generator_validation_links_for_idea_stage(tmp_path):
+    profile_path = VALID_DIR / "tiny-internal-tool.yaml"
+    out_dir = tmp_path / "idea_app"
+    assert generate_project(profile_path, out_dir) == 0
+
+    founder_doc = (out_dir / "DECISIONS-FOR-FOUNDER.md").read_text(encoding="utf-8")
+    assert "01-before-you-build.md" in founder_doc
+    assert "02-interview-script.md" in founder_doc
+    assert "03-demand-test.md" in founder_doc
+    assert "04-running-a-pilot.md" not in founder_doc
+
+
+def test_generator_validation_links_for_validated_stage(tmp_path):
+    profile_path = VALID_DIR / "small-paid-tool.yaml"
+    out_dir = tmp_path / "paid_app"
+    assert generate_project(profile_path, out_dir) == 0
+
+    founder_doc = (out_dir / "DECISIONS-FOR-FOUNDER.md").read_text(encoding="utf-8")
+    assert "04-running-a-pilot.md" in founder_doc
+    assert "pilot-tracker.csv" in founder_doc
+
+

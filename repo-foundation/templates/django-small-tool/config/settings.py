@@ -29,6 +29,8 @@ if not SECRET_KEY:
     if DEBUG or "test" in sys.argv:
         # Permitted fallback key strictly for local development and test execution
         SECRET_KEY = "django-insecure-dev-fallback-key-for-local-testing-only"
+    elif "baseline_check" in sys.argv:
+        SECRET_KEY = ""
     else:
         raise RuntimeError("CRITICAL: The SECRET_KEY environment variable is required when DEBUG is False.")
 
@@ -49,6 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -112,6 +115,15 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
